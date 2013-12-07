@@ -1,12 +1,14 @@
 package ru.project.dictionary;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Dictionary 
-{
-    //final int CAPACITY = 100;
-    //HashMap<String, Object> dictRuEng = new HashMap<>(CAPACITY);
-    //HashMap<String, Object> dictEngRu = new HashMap<>(CAPACITY);
+{   
+    public static HashMap<String, Object> dictRuEng = new HashMap<>();
+    public static HashMap<String, Object> dictEngRu = new HashMap<>();
     
     public void getAllWordsToSee(HashMap<String, Object> srcHashMap)
     {
@@ -22,25 +24,53 @@ public class Dictionary
         return srcHashMap.get(key);
     }
     
-    public void putWordToDict(HashMap<String, Object> srcHashMap, String key, Object word)
+    public static void putWordToDict(int dict, String key, Object word)
     {
-        srcHashMap.put(key, word);
+        if (dict == 0)
+        {
+            dictRuEng.put(key, word);
+        }
+        if (dict == 1)
+        {
+            dictEngRu.put(key, word);
+        }
     }
     
-    public static void main(String[] args) 
+    public static boolean isInDict(int dict, String key)
     {
-        final int CAPACITY = 100;
-        Word newWord = new Word();
-        Dictionary newDict = new Dictionary();
+        if (dict == 0)
+            return dictRuEng.containsKey(key);
+        else if (dict == 1)
+            return dictEngRu.containsKey(key);
+        else 
+        {
+            System.out.println("I don't know how you came here");
+            return false;
+        }
+    }
+    
+    public void sortKeys(HashMap<String, Object> srcHashMap)
+    {
+        TreeMap<String, Object> treeMap = new TreeMap<>();
+        Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
+        for (Map.Entry<String, Object> mapEntry : set)
+        {
+            treeMap.put(mapEntry.getKey(), mapEntry.getValue());
+        }
+        System.out.println(treeMap);
+    }
+    
+    public static void main(String[] args) throws IOException
+    {
+        InputStreamReader in = new InputStreamReader(System.in);
+        BufferedReader inBuf = new BufferedReader(in);
+        String buf;
+        View newView = new View();
         
-        HashMap<String, Object> dictRuEng = new HashMap<>(CAPACITY);
-        HashMap<String, Object> dictEngRu = new HashMap<>(CAPACITY);
-        
-        newWord.setName("Я");
-        newWord.setTranslation("I");
-        newWord.setTranscription("[a:j]");
-        
-        newDict.putWordToDict(dictRuEng, newWord.getName(), newWord);
-        newDict.getAllWordsToSee(dictRuEng); // я это намутил, чтоб убедиться, что хоть что-то выводится
+        while(true)
+        {
+            buf = inBuf.readLine();
+            newView.keyWords(buf);
+        }
     }
 }

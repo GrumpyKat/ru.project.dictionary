@@ -35,4 +35,10 @@ public class Word
     {
         transcription = aTranscription;
     }
+    
+    @Override
+    public String toString()
+    {
+        return transcription + " " + translation;
+    }
 }
