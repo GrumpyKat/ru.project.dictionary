@@ -1,6 +1,8 @@
 package ru.project.dictionary;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,9 +66,9 @@ public class View
     
     void put(String inputString) throws IOException
     {
-        int dict;
-        dict = language(inputString);
-    /*    if (dict == -1)
+        int type;
+        type = language(inputString);
+      /*if (dict == -1)
         {
             System.out.println("Type another command");
             exit();
@@ -94,7 +96,7 @@ public class View
         newWord.setTranscription(transcription.toLowerCase());
         newWord.setName(inputString.toLowerCase());
         
-        Dictionary.putWordToDict(dict, inputString.toLowerCase(), newWord);
+        Dictionary.putWordToDict(type, inputString.toLowerCase(), newWord);
         System.out.println(inputString.toLowerCase() + " in dictionary");
         
         exit();
@@ -103,22 +105,67 @@ public class View
     void find(String inputString) throws IOException
     {
         boolean isInDict;
-        int dict;
-        dict = language(inputString);
+        int type;
+        type = language(inputString);
+      /*if (dict == -1)
+        {
+            System.out.println("Type another command");
+            exit();
+        }*/
         
-        isInDict = Dictionary.isInDict(dict, inputString);
+        isInDict = Dictionary.isInDict(type, inputString.toLowerCase());
         if (isInDict == true)
         {
-            
+            System.out.println(inputString.toLowerCase() + ": " + 
+                    Dictionary.getWordFromDict(type, inputString.toLowerCase()));
+            exit();
         }
         else
         {
-            
+            HashSet<String> hs = new HashSet();
+            System.out.println("Your word is not in dictionary");
+            if (type == 0) hs = Dictionary.wordsStartWith(Dictionary.dictRuEng, inputString);
+            if (type == 1) hs = Dictionary.wordsStartWith(Dictionary.dictEngRu, inputString);
+            else
+            {
+                System.out.println("You couldn't come here, cheater");
+                exit();
+            }
+            if (hs.isEmpty())
+            {
+                System.out.println("Dictionary has no words like yours");
+                System.out.println("Try again with new word");
+                exit();
+            }
+            else
+            {
+                System.out.println("Perhaps you meant one of these:");
+                System.out.println(hs);
+                System.out.println("Try again with new word");
+                exit();
+            }
         }
     }
     
-    void sort()
+    void sort() throws IOException
     {
+        System.out.println("Which ditionary you want to sort?");
+        System.out.println("Input 'ru' for Russian-English; Input 'en' for English-Russian");
+        String type = inBuf.readLine();
+        int intType = 0;
+        if ("ru".equals(type)) intType = 0;
+        if ("en".equals(type)) intType = 1;
+        else
+        {
+            System.out.println("Invalid input");
+            exit();
+        }
+        TreeMap<String, Object> tm = new TreeMap<>();
+        if (intType == 0) tm = Dictionary.sortKeys(Dictionary.dictRuEng);
+        if (intType == 1) tm = Dictionary.sortKeys(Dictionary.dictEngRu);
+        System.out.println("Dictionary in alphabetical order");
+        System.out.println(tm);
+        exit();
         
     }
     

@@ -19,28 +19,36 @@ public class Dictionary
         }
     }
     
-    public Object getWordFromDict(HashMap<String, Object> srcHashMap, String key)
+    public static Object getWordFromDict(int type, String key)
     {
-        return srcHashMap.get(key);
+        if (type == 0)
+        {
+            return dictRuEng.get(key);
+        }
+        if (type == 1)
+        {
+            return dictEngRu.get(key);
+        }
+        else return null;
     }
     
-    public static void putWordToDict(int dict, String key, Object word)
+    public static void putWordToDict(int type, String key, Object word)
     {
-        if (dict == 0)
+        if (type == 0)
         {
             dictRuEng.put(key, word);
         }
-        if (dict == 1)
+        if (type == 1)
         {
             dictEngRu.put(key, word);
         }
     }
     
-    public static boolean isInDict(int dict, String key)
+    public static boolean isInDict(int type, String key)
     {
-        if (dict == 0)
+        if (type == 0)
             return dictRuEng.containsKey(key);
-        else if (dict == 1)
+        else if (type == 1)
             return dictEngRu.containsKey(key);
         else 
         {
@@ -49,7 +57,35 @@ public class Dictionary
         }
     }
     
-    public void sortKeys(HashMap<String, Object> srcHashMap)
+    public static HashSet<String> wordsStartWith(HashMap<String, Object> srcHashMap, String inputString)  //ищу ключи, начинающиеся с тех же слов, что и исходный ключ
+    {
+        HashSet<String> hs = new HashSet<>();
+        Scanner scanInputString = new Scanner(inputString);
+        String begin;
+        String exmp;
+        Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
+        while (scanInputString.hasNext())             //просто разит от того, как это не оптимизировано)
+        {                                             //но в принципе кол-во слов в строке 1-2, не больше
+            begin = scanInputString.next();
+            begin = begin.toLowerCase();
+            for (Map.Entry<String, Object> me : set)
+            {
+                Scanner scanKey = new Scanner(me.getKey());
+                while (scanKey.hasNext())
+                {
+                    exmp = scanKey.next();
+                    exmp = exmp.toLowerCase();
+                    if (exmp.startsWith(begin))
+                    {
+                        hs.add(exmp);
+                    }
+                }
+            }
+        }
+        return hs;
+    }
+    
+    public static TreeMap<String, Object> sortKeys(HashMap<String, Object> srcHashMap)
     {
         TreeMap<String, Object> treeMap = new TreeMap<>();
         Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
@@ -57,7 +93,7 @@ public class Dictionary
         {
             treeMap.put(mapEntry.getKey(), mapEntry.getValue());
         }
-        System.out.println(treeMap);
+        return treeMap;
     }
     
     public static void main(String[] args) throws IOException
