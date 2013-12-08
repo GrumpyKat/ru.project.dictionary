@@ -4,8 +4,8 @@ import java.util.*;
 
 public class Dictionary 
 {   
-    public static HashMap<String, Object> dictRuEng = new HashMap<>();
-    public static HashMap<String, Object> dictEngRu = new HashMap<>();
+    public static DictionaryModel dictRuEng = new DictionaryModel();
+    public static DictionaryModel dictEngRu = new DictionaryModel();
     
     public void getAllWordsToSee(HashMap<String, Object> srcHashMap)
     {
@@ -20,11 +20,11 @@ public class Dictionary
     {
         if (type == 0)
         {
-            return dictRuEng.get(key);
+            return dictRuEng.getKey(key);
         }
         if (type == 1)
         {
-            return dictEngRu.get(key);
+            return dictEngRu.getKey(key);
         }
         else return null;
     }
@@ -33,22 +33,22 @@ public class Dictionary
     {
         if (type == 0)
         {
-            dictRuEng.put(key, word);
-            DAO.doSerialize(type, word);
+            dictRuEng.putKey(key, word);
+            DAO.doSerialize(type, dictRuEng);
         }
         else if (type == 1)
         {
-            dictEngRu.put(key, word);
-            DAO.doSerialize(type, word);
+            dictEngRu.putKey(key, word);
+            DAO.doSerialize(type, dictEngRu);
         }
     }
     
     public static boolean isInDict(int type, String key)
     {
         if (type == 0)
-            return dictRuEng.containsKey(key);
+            return dictRuEng.containKey(key);
         else if (type == 1)
-            return dictEngRu.containsKey(key);
+            return dictEngRu.containKey(key);
         else 
         {
             System.out.println("I don't know how you came here");
@@ -56,13 +56,13 @@ public class Dictionary
         }
     }
     
-    public static HashSet<String> wordsStartWith(HashMap<String, Object> srcHashMap, String inputString)  //ищу ключи, начинающиеся с тех же слов, что и исходный ключ
+    public static HashSet<String> wordsStartWith(DictionaryModel srcHashMap, String inputString)  //ищу ключи, начинающиеся с тех же слов, что и исходный ключ
     {
         HashSet<String> hs = new HashSet<>();
         Scanner scanInputString = new Scanner(inputString);
         String begin;
         String exmp;
-        Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
+        Set<Map.Entry<String, Object>> set = srcHashMap.showEntrySet();
         while (scanInputString.hasNext())             //просто разит от того, как это не оптимизировано)
         {                                             //но в принципе кол-во слов в строке 1-2, не больше
             begin = scanInputString.next();
@@ -84,10 +84,10 @@ public class Dictionary
         return hs;
     }
     
-    public static TreeMap<String, Object> sortKeys(HashMap<String, Object> srcHashMap)
+    public static TreeMap<String, Object> sortKeys(DictionaryModel srcHashMap)
     {
         TreeMap<String, Object> treeMap = new TreeMap<>();
-        Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
+        Set<Map.Entry<String, Object>> set = srcHashMap.showEntrySet();
         for (Map.Entry<String, Object> mapEntry : set)
         {
             treeMap.put(mapEntry.getKey(), mapEntry.getValue());

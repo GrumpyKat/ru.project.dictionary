@@ -34,7 +34,7 @@ public class View
         }
     }
     
-    public void keyWords(String inputString) throws IOException //по ключевому слову узнаём, что хочет пользователь
+    public void keyWords(String inputString) throws IOException, Exception //по ключевому слову узнаём, что хочет пользователь
     {                                                           //put, find, sort, exit
         if (inputString.isEmpty()) return;
         Pattern pat1 = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
@@ -70,7 +70,7 @@ public class View
             System.out.println("Invalid command");
     }
     
-    void put(String inputString) throws IOException
+    void put(String inputString) throws IOException, Exception
     {
         int type;
         type = language(inputString);
@@ -103,7 +103,7 @@ public class View
         newWord.setName(inputString.toLowerCase());
         
         Dictionary.putWordToDict(type, inputString.toLowerCase(), newWord);
-        System.out.println(inputString.toLowerCase() + " - " + transcription + " " + translation + " in dictionary");
+        System.out.println(inputString.toLowerCase() + " [" + transcription + "] " + translation + " in dictionary");
     }
     
     void find(String inputString) throws IOException

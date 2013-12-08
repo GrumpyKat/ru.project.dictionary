@@ -1,4 +1,14 @@
-<word name="word">
-   <translation>slovo</translation>
-   <transcription>slovo</transcription>
-</word>
+<dictionary>
+   <word name="w">
+      <object class="ru.project.dictionary.Word">
+         <translation>w</translation>
+         <transcription>w</transcription>
+      </object>
+   </word>
+   <word name="q">
+      <object class="ru.project.dictionary.Word">
+         <translation>q</translation>
+         <transcription>q</transcription>
+      </object>
+   </word>
+</dictionary>
