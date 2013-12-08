@@ -5,6 +5,12 @@
          <transcription>w</transcription>
       </object>
    </word>
+   <word name="e">
+      <object class="ru.project.dictionary.Word">
+         <translation>e</translation>
+         <transcription>e</transcription>
+      </object>
+   </word>
    <word name="q">
       <object class="ru.project.dictionary.Word">
          <translation>q</translation>

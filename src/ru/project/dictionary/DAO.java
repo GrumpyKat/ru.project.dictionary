@@ -17,4 +17,19 @@ public class DAO
         else if (type == 1)
             serializer.write(dict, resultEng);
     }
+    
+    public static void doDeserialize() throws Exception
+    {
+        DictionaryModel dict;
+        if (resultEng.exists())
+        {
+            dict = serializer.read(DictionaryModel.class, resultEng);
+            Dictionary.dictEngRu = dict;
+        }
+        if (resultRus.exists())
+        {
+            dict = serializer.read(DictionaryModel.class, resultRus);
+            Dictionary.dictRuEng = dict;
+        }
+    }
 }

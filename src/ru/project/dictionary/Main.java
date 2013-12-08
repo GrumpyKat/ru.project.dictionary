@@ -12,6 +12,7 @@ public class Main {
         BufferedReader inBuf = new BufferedReader(in);
         String buf;
         View newView = new View();
+        DAO.doDeserialize();
         
         while(true)
         {
