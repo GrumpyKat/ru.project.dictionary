@@ -13,6 +13,7 @@ public class Main {
         String buf;
         View newView = new View();
         DAO.doDeserialize();
+        System.out.println("Type 'help' to see possible patterns");
         
         while(true)
         {

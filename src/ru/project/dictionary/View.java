@@ -37,35 +37,42 @@ public class View
     public void keyWords(String inputString) throws IOException, Exception //по ключевому слову узнаём, что хочет пользователь
     {                                                           //put, find, sort, exit
         if (inputString.isEmpty()) return;
-        Pattern pat1 = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
-        Pattern pat2 = Pattern.compile("find [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
-        Pattern pat3 = Pattern.compile("sort");
-        Pattern pat4 = Pattern.compile("exit");
-        Pattern pat5 = Pattern.compile("\n");
-        Matcher mat = pat1.matcher(inputString);
+        Pattern patPut = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
+        Pattern patFind = Pattern.compile("find [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
+        Pattern patSort = Pattern.compile("sort");
+        Pattern patExit = Pattern.compile("exit");
+        Pattern patEnter = Pattern.compile("\n");
+        Pattern patHelp = Pattern.compile("help");
+        Matcher mat = patPut.matcher(inputString);
         if (mat.matches())
         {
             put(inputString.substring(4));
             return;
         }
-        mat = pat2.matcher(inputString);
+        mat = patFind.matcher(inputString);
         if (mat.matches())
         {
             find(inputString.substring(5));
             return;
         }
-        mat = pat3.matcher(inputString);
+        mat = patSort.matcher(inputString);
         if (mat.matches())
         {
             sort();
             return;
         }
-        mat = pat4.matcher(inputString);
+        mat = patExit.matcher(inputString);
         if (mat.matches())
         {
             exit();
         }
-        mat = pat5.matcher(inputString);
+        mat = patHelp.matcher(inputString);
+        if (mat.matches())
+        {
+            help();
+            return;
+        }
+        mat = patEnter.matcher(inputString);
         if (!mat.matches())
             System.out.println("Invalid command");
     }
@@ -182,5 +189,14 @@ public class View
         {
             System.exit(0);
         }        
+    }
+    
+    void help()
+    {
+        System.out.println("Possible patterns:");
+        System.out.println("put 'word'");
+        System.out.println("find 'word'");
+        System.out.println("sort");
+        System.out.println("exit");
     }
 }
