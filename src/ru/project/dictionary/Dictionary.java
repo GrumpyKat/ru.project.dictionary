@@ -1,8 +1,5 @@
 package ru.project.dictionary;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class Dictionary 
@@ -32,15 +29,17 @@ public class Dictionary
         else return null;
     }
     
-    public static void putWordToDict(int type, String key, Object word)
+    public static void putWordToDict(int type, String key, Object word) throws Exception
     {
         if (type == 0)
         {
             dictRuEng.put(key, word);
+            DAO.doSerialize(type, word);
         }
-        if (type == 1)
+        else if (type == 1)
         {
             dictEngRu.put(key, word);
+            DAO.doSerialize(type, word);
         }
     }
     
@@ -77,7 +76,7 @@ public class Dictionary
                     exmp = exmp.toLowerCase();
                     if (exmp.startsWith(begin))
                     {
-                        hs.add(exmp);
+                        hs.add(me.getKey());
                     }
                 }
             }
@@ -94,19 +93,5 @@ public class Dictionary
             treeMap.put(mapEntry.getKey(), mapEntry.getValue());
         }
         return treeMap;
-    }
-    
-    public static void main(String[] args) throws IOException
-    {
-        InputStreamReader in = new InputStreamReader(System.in);
-        BufferedReader inBuf = new BufferedReader(in);
-        String buf;
-        View newView = new View();
-        
-        while(true)
-        {
-            buf = inBuf.readLine();
-            newView.keyWords(buf);
-        }
     }
 }

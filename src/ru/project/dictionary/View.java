@@ -36,31 +36,37 @@ public class View
     
     public void keyWords(String inputString) throws IOException //по ключевому слову узнаём, что хочет пользователь
     {                                                           //put, find, sort, exit
+        if (inputString.isEmpty()) return;
         Pattern pat1 = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
         Pattern pat2 = Pattern.compile("find [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
         Pattern pat3 = Pattern.compile("sort");
         Pattern pat4 = Pattern.compile("exit");
+        Pattern pat5 = Pattern.compile("\n");
         Matcher mat = pat1.matcher(inputString);
         if (mat.matches())
         {
             put(inputString.substring(4));
+            return;
         }
         mat = pat2.matcher(inputString);
         if (mat.matches())
         {
             find(inputString.substring(5));
+            return;
         }
         mat = pat3.matcher(inputString);
         if (mat.matches())
         {
             sort();
+            return;
         }
         mat = pat4.matcher(inputString);
         if (mat.matches())
         {
             exit();
         }
-        else
+        mat = pat5.matcher(inputString);
+        if (!mat.matches())
             System.out.println("Invalid command");
     }
     
@@ -97,9 +103,7 @@ public class View
         newWord.setName(inputString.toLowerCase());
         
         Dictionary.putWordToDict(type, inputString.toLowerCase(), newWord);
-        System.out.println(inputString.toLowerCase() + " in dictionary");
-        
-        exit();
+        System.out.println(inputString.toLowerCase() + " - " + transcription + " " + translation + " in dictionary");
     }
     
     void find(String inputString) throws IOException
@@ -118,31 +122,28 @@ public class View
         {
             System.out.println(inputString.toLowerCase() + ": " + 
                     Dictionary.getWordFromDict(type, inputString.toLowerCase()));
-            exit();
         }
         else
         {
             HashSet<String> hs = new HashSet();
             System.out.println("Your word is not in dictionary");
             if (type == 0) hs = Dictionary.wordsStartWith(Dictionary.dictRuEng, inputString);
-            if (type == 1) hs = Dictionary.wordsStartWith(Dictionary.dictEngRu, inputString);
+            else if (type == 1) hs = Dictionary.wordsStartWith(Dictionary.dictEngRu, inputString);
             else
             {
                 System.out.println("You couldn't come here, cheater");
-                exit();
+                return;
             }
             if (hs.isEmpty())
             {
                 System.out.println("Dictionary has no words like yours");
                 System.out.println("Try again with new word");
-                exit();
             }
             else
             {
                 System.out.println("Perhaps you meant one of these:");
                 System.out.println(hs);
                 System.out.println("Try again with new word");
-                exit();
             }
         }
     }
@@ -154,19 +155,17 @@ public class View
         String type = inBuf.readLine();
         int intType = 0;
         if ("ru".equals(type)) intType = 0;
-        if ("en".equals(type)) intType = 1;
+        else if ("en".equals(type)) intType = 1;
         else
         {
             System.out.println("Invalid input");
-            exit();
+            return;
         }
         TreeMap<String, Object> tm = new TreeMap<>();
         if (intType == 0) tm = Dictionary.sortKeys(Dictionary.dictRuEng);
-        if (intType == 1) tm = Dictionary.sortKeys(Dictionary.dictEngRu);
+        else if (intType == 1) tm = Dictionary.sortKeys(Dictionary.dictEngRu);
         System.out.println("Dictionary in alphabetical order");
-        System.out.println(tm);
-        exit();
-        
+        System.out.println(tm);        
     }
     
     void exit()
