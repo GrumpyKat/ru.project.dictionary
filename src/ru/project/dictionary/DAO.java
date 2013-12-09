@@ -10,7 +10,7 @@ public class DAO
     static File resultEng = new File("dictionaryEng.xml");
     static File resultRus = new File("dictionaryRus.xml");
     
-    public static void doSerialize(int type, Object dict) throws Exception
+    public static void doSerialize(int type, DictionaryModel dict) throws Exception
     {
         if (type == 0)
             serializer.write(dict, resultRus);

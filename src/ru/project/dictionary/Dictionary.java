@@ -7,10 +7,10 @@ public class Dictionary
     public static DictionaryModel dictRuEng = new DictionaryModel();
     public static DictionaryModel dictEngRu = new DictionaryModel();
     
-    public void getAllWordsToSee(HashMap<String, Object> srcHashMap)
+    public void getAllWordsToSee(HashMap<String, Word> srcHashMap)
     {
-        Set<Map.Entry<String, Object>> set = srcHashMap.entrySet();
-        for (Map.Entry<String, Object> me : set)
+        Set<Map.Entry<String, Word>> set = srcHashMap.entrySet();
+        for (Map.Entry<String, Word> me : set)
         {
             System.out.println(me.getKey() + ": " + me.getValue());
         }
@@ -29,7 +29,7 @@ public class Dictionary
         else return null;
     }
     
-    public static void putWordToDict(int type, String key, Object word) throws Exception
+    public static void putWordToDict(int type, String key, Word word) throws Exception
     {
         if (type == 0)
         {
@@ -62,12 +62,12 @@ public class Dictionary
         Scanner scanInputString = new Scanner(inputString);
         String begin;
         String exmp;
-        Set<Map.Entry<String, Object>> set = srcHashMap.showEntrySet();
+        Set<Map.Entry<String, Word>> set = srcHashMap.showEntrySet();
         while (scanInputString.hasNext())             //просто разит от того, как это не оптимизировано)
         {                                             //но в принципе кол-во слов в строке 1-2, не больше
             begin = scanInputString.next();
             begin = begin.toLowerCase();
-            for (Map.Entry<String, Object> me : set)
+            for (Map.Entry<String, Word> me : set)
             {
                 Scanner scanKey = new Scanner(me.getKey());
                 while (scanKey.hasNext())
@@ -84,14 +84,44 @@ public class Dictionary
         return hs;
     }
     
-    public static TreeMap<String, Object> sortKeys(DictionaryModel srcHashMap)
+    public static TreeMap<String, Word> sortKeys(DictionaryModel srcHashMap)
     {
-        TreeMap<String, Object> treeMap = new TreeMap<>();
-        Set<Map.Entry<String, Object>> set = srcHashMap.showEntrySet();
-        for (Map.Entry<String, Object> mapEntry : set)
+        TreeMap<String, Word> treeMap = new TreeMap<>();
+        Set<Map.Entry<String, Word>> set = srcHashMap.showEntrySet();
+        for (Map.Entry<String, Word> mapEntry : set)
         {
             treeMap.put(mapEntry.getKey(), mapEntry.getValue());
         }
         return treeMap;
+    }
+    
+    public static void removeWordFromDict(int type, String inputString) throws Exception
+    {
+        if (type == 0)
+        {
+            dictRuEng.removeKey(inputString);
+            if (dictRuEng.isEmpty())
+            {
+                System.out.println("Your dictionary is empty now");
+                DAO.resultRus.delete();
+            }
+            else
+            DAO.doSerialize(type, dictRuEng);
+        }
+        else if (type == 1)
+        {           
+            dictEngRu.removeKey(inputString);
+            if (dictEngRu.isEmpty())
+            {
+                System.out.println("Your dictionary is empty now");
+                DAO.resultEng.delete();
+            }
+            else
+            DAO.doSerialize(type, dictEngRu);
+        }
+        else 
+        {
+            System.out.println("I don't know how you came here");
+        }
     }
 }

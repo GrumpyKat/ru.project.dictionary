@@ -43,6 +43,6 @@ public class Word
     @Override
     public String toString()
     {
-        return transcription + " " + translation;
+        return "[" + transcription + "] " + translation;
     }
 }

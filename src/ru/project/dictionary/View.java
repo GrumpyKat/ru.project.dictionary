@@ -19,8 +19,8 @@ public class View
     
     public int language(String inputString) //0 - Rus->Eng; 1 - Eng->Rus; -1 - try new word
     {
-        Pattern pat1 = Pattern.compile("[А-Яа-я][ А-Яа-я']*");
-        Pattern pat2 = Pattern.compile("[A-Za-z][ A-Za-z']*");
+        Pattern pat1 = Pattern.compile("[А-Яа-я][ А-Яа-я'-]*");
+        Pattern pat2 = Pattern.compile("[A-Za-z][ A-Za-z'-]*");
         Matcher mat = pat1.matcher(inputString);
         if (mat.matches()) return 0;
         mat = pat2.matcher(inputString);
@@ -29,7 +29,6 @@ public class View
         {
             System.out.println("There is no such language in my dictionary");
             System.out.println("Type another command");
-            exit();
             return -1;
         }
     }
@@ -37,8 +36,9 @@ public class View
     public void keyWords(String inputString) throws IOException, Exception //по ключевому слову узнаём, что хочет пользователь
     {                                                           //put, find, sort, exit
         if (inputString.isEmpty()) return;
-        Pattern patPut = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
-        Pattern patFind = Pattern.compile("find [А-Яа-яA-Za-z][ А-Яа-яA-Za-z']*");
+        Pattern patPut = Pattern.compile("put [А-Яа-яA-Za-z][ А-Яа-яA-Za-z'-]*");
+        Pattern patFind = Pattern.compile("find [А-Яа-яA-Za-z][ А-Яа-яA-Za-z'-]*");
+        Pattern patRemove = Pattern.compile("remove [А-Яа-яA-Za-z][ А-Яа-яA-Za-z'-]*");
         Pattern patSort = Pattern.compile("sort");
         Pattern patExit = Pattern.compile("exit");
         Pattern patEnter = Pattern.compile("\n");
@@ -72,6 +72,12 @@ public class View
             help();
             return;
         }
+        mat = patRemove.matcher(inputString);
+        if (mat.matches())
+        {
+            remove(inputString.substring(7));
+            return;
+        }
         mat = patEnter.matcher(inputString);
         if (!mat.matches())
             System.out.println("Invalid command");
@@ -81,11 +87,10 @@ public class View
     {
         int type;
         type = language(inputString);
-      /*if (dict == -1)
+        if (type == -1)
         {
-            System.out.println("Type another command");
-            exit();
-        }*/
+            return;
+        }
         
         System.out.println("Input translation for your word");
         String translation = inBuf.readLine();
@@ -118,11 +123,10 @@ public class View
         boolean isInDict;
         int type;
         type = language(inputString);
-      /*if (dict == -1)
+        if (type == -1)
         {
-            System.out.println("Type another command");
-            exit();
-        }*/
+            return;
+        }
         
         isInDict = Dictionary.isInDict(type, inputString.toLowerCase());
         if (isInDict == true)
@@ -132,7 +136,7 @@ public class View
         }
         else
         {
-            HashSet<String> hs = new HashSet();
+            HashSet<String> hs;
             System.out.println("Your word is not in dictionary");
             if (type == 0) hs = Dictionary.wordsStartWith(Dictionary.dictRuEng, inputString);
             else if (type == 1) hs = Dictionary.wordsStartWith(Dictionary.dictEngRu, inputString);
@@ -160,17 +164,19 @@ public class View
         System.out.println("Which ditionary you want to sort?");
         System.out.println("Input 'ru' for Russian-English; Input 'en' for English-Russian");
         String type = inBuf.readLine();
-        int intType = 0;
-        if ("ru".equals(type)) intType = 0;
-        else if ("en".equals(type)) intType = 1;
-        else
+        TreeMap<String, Word> tm;
+        switch (type) 
         {
-            System.out.println("Invalid input");
-            return;
+            case "ru":
+                tm = Dictionary.sortKeys(Dictionary.dictRuEng);
+                break;
+            case "en":
+                tm = Dictionary.sortKeys(Dictionary.dictEngRu);
+                break;
+            default:
+                System.out.println("Invalid input");
+                return;
         }
-        TreeMap<String, Object> tm = new TreeMap<>();
-        if (intType == 0) tm = Dictionary.sortKeys(Dictionary.dictRuEng);
-        else if (intType == 1) tm = Dictionary.sortKeys(Dictionary.dictEngRu);
         System.out.println("Dictionary in alphabetical order");
         System.out.println(tm);        
     }
@@ -197,6 +203,30 @@ public class View
         System.out.println("put 'word'");
         System.out.println("find 'word'");
         System.out.println("sort");
+        System.out.println("remove 'word'");
         System.out.println("exit");
+    }
+    
+    void remove(String inputString) throws Exception
+    {
+        int type;
+        type = language(inputString);
+        if (type == -1)
+        {
+            return;
+        }
+        
+        boolean isInDict;
+        isInDict = Dictionary.isInDict(type, inputString.toLowerCase());
+        if (isInDict == true)
+        {
+            Dictionary.removeWordFromDict(type, inputString.toLowerCase());
+            System.out.println("Your word has been removed");
+        }
+        else
+        {
+            System.out.println("This word is not in dictionary");
+            System.out.println("Type another word");
+        }
     }
 }

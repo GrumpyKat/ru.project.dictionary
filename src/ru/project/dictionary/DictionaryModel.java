@@ -10,14 +10,14 @@ import org.simpleframework.xml.Root;
 public class DictionaryModel
 {
     @ElementMap(entry="word", key="name", attribute=true, inline=true)
-    public  HashMap<String, Object> dict = new HashMap<>();
+    public  HashMap<String, Word> dict = new HashMap<>();
     
     public Object getKey(String key)
     {
         return dict.get(key);
     }
     
-    public void putKey(String key, Object word)
+    public void putKey(String key, Word word)
     {
         dict.put(key, word);
     }
@@ -27,9 +27,19 @@ public class DictionaryModel
         return dict.containsKey(key);
     }
     
-    public Set<Map.Entry<String, Object>> showEntrySet()
+    public Set<Map.Entry<String, Word>> showEntrySet()
     {
-        Set<Map.Entry<String, Object>> set = dict.entrySet();
+        Set<Map.Entry<String, Word>> set = dict.entrySet();
         return set;
+    }
+    
+    public void removeKey(String key)
+    {
+        dict.remove(key);
+    }
+    
+    public boolean isEmpty()
+    {
+        return dict.isEmpty();
     }
 }
